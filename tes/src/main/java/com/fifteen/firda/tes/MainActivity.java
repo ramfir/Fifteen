@@ -54,9 +54,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         buttonWidth = size.x / 4;
         buttonHeight = size.y / 4 - size.y / 28;
-        contribution(false);
+        //contribution(false);
         mTimer = new Timer();
         mMyTimerTask = new MyTimerTask();
+        mTimer.schedule(mMyTimerTask, 0, 1000);
+        startGame(false);
+    }
+
+    public void startGame(boolean hardness) {
+        count = 0;
+        for (int i = 0; i < 15; i++) {
+            buttons[i].setEnabled(true);
+        }
+        //mTimer.purge();
+        //mMyTimerTask = new MyTimerTask();
+        start = true;
+        //mTimer.schedule(mMyTimerTask, 0, 1000);
+        contribution(hardness);
+    }
+
+    public  void finishGame() {
+        start = false;
+        //mTimer.cancel();
+        for (int i = 0; i < 15; i++) {
+            buttons[i].setEnabled(false);
+        }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -67,16 +89,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public boolean onOptionsItemSelected(MenuItem item) {
         if ("Normal level".equals(item.getTitle())) {
-            contribution(false);
+            startGame(false);
         }
         else if ("Hard level".equals(item.getTitle())) {
-            contribution(true);
+            startGame(true);
         }
         return super.onOptionsItemSelected(item);
     }
 
     private boolean contribution(boolean hard) {
-        count = 0;
+        //count = 0;
         //Log.d(TAG, "UUU");
 
         Collections.shuffle(l);
@@ -139,8 +161,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 @Override
                 public void run() {
-                    TimerTextView.setText(Integer.toString(count));
-                    count += 1;
+                    if (start) {
+                        TimerTextView.setText(Integer.toString(count));
+                        count += 1;
+                    }
                 }
             });
         }
@@ -160,6 +184,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             x += buttonWidth;
             if (i == 14) {
                 Toast.makeText(this, "You have done it in " + TimerTextView.getText() + " seconds", Toast.LENGTH_LONG).show();
+                //nbuttons[i].sete
+                //mTimer.cancel();
+                finishGame();
             }
         }
     }
