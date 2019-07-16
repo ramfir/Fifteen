@@ -23,12 +23,12 @@ import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private List<Integer> buttons;
+    private Buttons buttons;
     private TextView TimerTextView;
     private int count = 0;
     private List<Button> listButtons;
-    private Timer mTimer;
-    private MyTimerTask mMyTimerTask;
+    //private Timer mTimer;
+    //private MyTimerTask mMyTimerTask;
     private static final String TAG = "MainActivity";
 
     @Override
@@ -56,18 +56,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listButtons.add((Button)findViewById(R.id.sixteen));
         for (int i = 0; i < 16; i++)
             listButtons.get(i).setOnClickListener(this);
-        buttons = new ArrayList<>();
-        for (int i = 0; i < 16; i++) {
-            buttons.add(new Integer(i+1));
-        }
+        buttons = new Buttons();
         startGame(false);
     }
 
-    public void startGame(boolean hard) {
+    private void startGame(boolean hard) {
         count = 0;
-        mTimer = new Timer();
+        /*mTimer = new Timer();
         mMyTimerTask = new MyTimerTask();
-        mTimer.schedule(mMyTimerTask, 0, 1000);
+        mTimer.schedule(mMyTimerTask, 0, 1000);*/
         for (int i = 0; i < 16; i++) {
             listButtons.get(i).setEnabled(true);
         }
@@ -75,10 +72,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public  void finishGame() {
-        mTimer.cancel();
+        /*mTimer.cancel();
         mTimer.purge();
-        mTimer = null;
         mMyTimerTask = null;
+        mTimer = null;*/
+
         for (int i = 0; i < 16; i++) {
             listButtons.get(i).setEnabled(false);
         }
@@ -100,43 +98,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean contribution(boolean hard) {
-        if (hard)
-            Log.d(TAG, "HHHHHHHH");
-        Collections.shuffle(buttons);
-        int result = 0;
-        for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < i; j++) {
-                if (buttons.get(j) > buttons.get(i)) {
-                    result++;
-                }
-            }
-        }
-        for (int i = 0; i < 16; i++) {
-            if (buttons.get(i) == 16) {
-                result += 1 + i/4;
-                break;
-            }
-        }
-        if (!hard && result % 2 == 1) {
-            return contribution(hard);
-        }
-        else if (hard && result % 2 == 0) {
-            return contribution(hard);
-        }
+    private void contribution(boolean hard) {
 
-        for (int i = 0; i < 16; i++)
-            listButtons.get(i).setText(buttons.get(i).toString());
-        for (int i = 0; i < 16; i++) {
-            if (listButtons.get(i).getText().toString().equals("16")) {
-                listButtons.get(i).setEnabled(false);
-                break;
-            }
-        }
-        return true;
+        buttons.shuffleButtons(hard);
+        updateButtons();
     }
 
-    private class MyTimerTask extends TimerTask {
+    /*private class MyTimerTask extends TimerTask {
 
         @Override
         public void run() {
@@ -149,11 +117,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
         }
-    }
+    }*/
 
     private void check() {
-        float x = 0;
-        float y = 0;
         for (int i = 0; i < 16; i++) {
             if (Integer.parseInt(listButtons.get(i).getText().toString()) != i + 1)
                 break;
@@ -168,27 +134,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         Button btn = (Button)v;
         int index = listButtons.indexOf(btn);
-        if (index + 1 < listButtons.size() && listButtons.get(index+1).getText().toString().equals("16")) {
-            listButtons.get(index+1).setText(listButtons.get(index).getText());
-            listButtons.get(index+1).setEnabled(true);
-            listButtons.get(index).setText("16");
-            listButtons.get(index).setEnabled(false);
-        } else if (index - 1 >= 0 && listButtons.get(index-1).getText().toString().equals("16")) {
-            listButtons.get(index-1).setEnabled(true);
-            listButtons.get(index-1).setText(listButtons.get(index).getText());
-            listButtons.get(index).setText("16");
-            listButtons.get(index).setEnabled(false);
-        } else if (index + 4 < listButtons.size() && listButtons.get(index+4).getText().toString().equals("16")) {
-            listButtons.get(index+4).setEnabled(true);
-            listButtons.get(index+4).setText(listButtons.get(index).getText());
-            listButtons.get(index).setText("16");
-            listButtons.get(index).setEnabled(false);
-        } else if (index - 4 >= 0 && listButtons.get(index-4).getText().toString().equals("16")) {
-            listButtons.get(index-4).setEnabled(true);
-            listButtons.get(index-4).setText(listButtons.get(index).getText());
-            listButtons.get(index).setText("16");
-            listButtons.get(index).setEnabled(false);
-        }
+        buttons.moveButtons(index);
+        updateButtons();
         check();
     }
+
+    private void updateButtons() {
+        for (int i = 0; i < 16; i++) {
+            listButtons.get(i).setText(buttons.get(i).toString());
+            listButtons.get(i).setEnabled(true);
+            if (buttons.get(i) == 16) listButtons.get(i).setEnabled(false);
+        }
+    }
 }
+
