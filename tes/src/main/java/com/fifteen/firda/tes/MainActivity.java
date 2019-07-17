@@ -1,5 +1,6 @@
 package com.fifteen.firda.tes;
 
+import android.content.Intent;
 import android.graphics.Point;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -27,9 +28,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView TimerTextView;
     private int count = 0;
     private List<Button> listButtons;
-    //private Timer mTimer;
-    //private MyTimerTask mMyTimerTask;
+    private Timer mTimer;
+    private MyTimerTask mMyTimerTask;
     private static final String TAG = "MainActivity";
+    private boolean level;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,27 +58,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listButtons.add((Button)findViewById(R.id.sixteen));
         for (int i = 0; i < 16; i++)
             listButtons.get(i).setOnClickListener(this);
-        buttons = new Buttons();
-        startGame(false);
+        startGame(false, savedInstanceState);
     }
 
-    private void startGame(boolean hard) {
-        count = 0;
-        /*mTimer = new Timer();
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putSerializable("TAG", buttons);
+        savedInstanceState.putInt("COUNT", count);
+    }
+
+    private void startGame(boolean hard, Bundle savedInstanceState) {
+
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+        mTimer = new Timer();
         mMyTimerTask = new MyTimerTask();
-        mTimer.schedule(mMyTimerTask, 0, 1000);*/
+        mTimer.schedule(mMyTimerTask, 0, 1000);
         for (int i = 0; i < 16; i++) {
             listButtons.get(i).setEnabled(true);
         }
-        contribution(hard);
+        if (savedInstanceState == null) {
+            Intent intent = getIntent();
+            if (intent.getExtras() != null && !level) {
+                buttons = (Buttons) intent.getSerializableExtra("BUTTONS");
+                count = intent.getIntExtra("COUNT", 0);
+                updateButtons();
+            } else {
+                count = 0;
+                buttons = new Buttons();
+                contribution(hard);
+            }
+        } else {
+            count = savedInstanceState.getInt("COUNT");
+            buttons = (Buttons) savedInstanceState.getSerializable("TAG");
+            updateButtons();
+        }
+
     }
 
     public  void finishGame() {
-        /*mTimer.cancel();
-        mTimer.purge();
-        mMyTimerTask = null;
-        mTimer = null;*/
-
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
         for (int i = 0; i < 16; i++) {
             listButtons.get(i).setEnabled(false);
         }
@@ -85,26 +112,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add("Normal level");
         menu.add("Hard level");
+        menu.add("Back");
         return super.onCreateOptionsMenu(menu);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         if ("Normal level".equals(item.getTitle())) {
-            startGame(false);
+            level = true;
+            startGame(false, null);
         }
         else if ("Hard level".equals(item.getTitle())) {
-            startGame(true);
+            level = true;
+            startGame(true, null);
+        } else if ("Back".equals(item.getTitle())) {
+            back();
         }
         return super.onOptionsItemSelected(item);
     }
 
+    public void back() {
+        Intent intent = new Intent(this, StartActivity.class);
+        intent.putExtra("BUTTONS", buttons);
+        intent.putExtra("COUNT", count);
+        startActivity(intent);
+    }
     private void contribution(boolean hard) {
 
         buttons.shuffleButtons(hard);
         updateButtons();
     }
 
-    /*private class MyTimerTask extends TimerTask {
+    private class MyTimerTask extends TimerTask {
 
         @Override
         public void run() {
@@ -117,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
         }
-    }*/
+    }
 
     private void check() {
         for (int i = 0; i < 16; i++) {
