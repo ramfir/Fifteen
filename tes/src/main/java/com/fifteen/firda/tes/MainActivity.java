@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -150,7 +151,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 @Override
                 public void run() {
-                    TimerTextView.setText(Integer.toString(count));
+                    int hours = count / 3600;
+                    int minutes = (count% 3600) / 60;
+                    int secs = count % 60;
+                    String time = String.format(Locale.getDefault(),
+                            "%02d:%02d:%02d", hours, minutes, secs);
+                    TimerTextView.setText(time);
                     count += 1;
                 }
             });

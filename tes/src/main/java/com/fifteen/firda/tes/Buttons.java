@@ -2,11 +2,12 @@ package com.fifteen.firda.tes;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Buttons {
+public class Buttons implements Serializable {
     private List<Integer> buttons;
 
     public Buttons() {
@@ -25,7 +26,7 @@ public class Buttons {
         int result = 0;
         for (int i = 0; i < 16; i++) {
             if (buttons.get(i) != 16) {
-                Log.d("TAG", buttons.get(i).toString());
+                //Log.d("TAG", buttons.get(i).toString());
                 for (int j = 0; j < i; j++) {
                     if (buttons.get(j) != 16) {
                         if (buttons.get(j) > buttons.get(i)) {
@@ -47,8 +48,8 @@ public class Buttons {
         else if (hard && result % 2 == 0) {
             return shuffleButtons(hard);
         }
-        if (!hard && result%2==0)
-            Log.d("TAG", "URAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        //if (!hard && result%2==0)
+          //  Log.d("TAG", "URAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         return true;
     }
 
