@@ -1,5 +1,7 @@
 package com.fifteen.firda.tes;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import java.io.Serializable;
@@ -16,7 +18,11 @@ public class Buttons implements Serializable {
             buttons.add(i+1);
         }
     }
+    public static void foo(Context context) {
+        Intent intent = new Intent(context, StartActivity.class);
+        context.startActivity(intent);
 
+    }
     public Integer get(int i) {
         return buttons.get(i);
     }

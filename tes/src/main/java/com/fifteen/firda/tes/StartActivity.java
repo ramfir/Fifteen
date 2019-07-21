@@ -30,6 +30,10 @@ public class StartActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void startImages(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
     public void continueLastAttempt(View view) {
         if (buttons == null) {
             Toast.makeText(this, "There was not any attempts", Toast.LENGTH_SHORT).show();
