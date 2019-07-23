@@ -32,6 +32,16 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
+        <Switch
+            android:id="@+id/switch_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onSwitchClicked"
+            android:showText="true"
+            android:textOff="@string/off"
+            android:textOn="@string/off" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -46,8 +56,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/image_part_001"
-
             android:scaleType="fitCenter"
             android:text="1"
             android:textColor="@android:color/background_dark"
@@ -59,7 +67,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/image_part_002"
             android:scaleType="fitCenter"
             android:text="2"
             android:textColor="@android:color/background_dark"
@@ -72,7 +79,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/image_part_003"
             android:scaleType="fitCenter"
             android:text="3"
             android:textColor="@android:color/background_dark"
@@ -84,7 +90,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/image_part_004"
+
             android:scaleType="fitCenter"
             android:text="4"
             android:textColor="@android:color/background_dark"
@@ -103,7 +109,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/image_part_005"
+
             android:scaleType="fitCenter"
             android:text="5"
             android:textColor="@android:color/background_dark"
@@ -115,7 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/image_part_006"
+
             android:scaleType="fitCenter"
             android:text="6"
             android:textColor="@android:color/background_dark"
@@ -127,7 +133,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/image_part_007"
+
             android:scaleType="fitCenter"
             android:text="7"
             android:textColor="@android:color/background_dark"
@@ -139,7 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/image_part_008"
+
             android:scaleType="fitCenter"
             android:text="8"
             android:textColor="@android:color/background_dark"
@@ -158,7 +164,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/image_part_009"
+
             android:scaleType="fitCenter"
             android:text="9"
             android:textColor="@android:color/background_dark"
@@ -170,7 +176,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/image_part_010"
+
             android:scaleType="fitCenter"
             android:text="10"
             android:textColor="@android:color/background_dark"
@@ -182,7 +188,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/image_part_011"
+
             android:scaleType="fitCenter"
             android:text="11"
             android:textColor="@android:color/background_dark"
@@ -194,7 +200,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/image_part_012"
+
             android:scaleType="fitCenter"
             android:text="12"
             android:textColor="@android:color/background_dark"
@@ -213,7 +219,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/image_part_013"
+
             android:scaleType="fitCenter"
             android:text="13"
             android:textColor="@android:color/background_dark"
@@ -225,7 +231,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/image_part_014"
+
             android:scaleType="fitCenter"
             android:text="14"
             android:textColor="@android:color/background_dark"
@@ -237,7 +243,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/image_part_015"
+
             android:scaleType="fitCenter"
             android:text="15"
             android:textColor="@android:color/background_dark"
@@ -249,7 +255,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/image_part_016"
+
             android:scaleType="fitCenter"
             android:text="16"
             android:textColor="@android:color/background_dark"

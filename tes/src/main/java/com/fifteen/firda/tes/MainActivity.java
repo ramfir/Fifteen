@@ -3,37 +3,33 @@ package com.fifteen.firda.tes;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Buttons buttons;
+    private Cards mCards;
     private TextView TimerTextView;
     private int count = 0;
     private List<Button> listButtons;
@@ -41,16 +37,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MyTimerTask mMyTimerTask;
     private static final String TAG = "MainActivity";
     private boolean level;
-    List<Drawable> drawables;
+    //ArrayList<Drawable> drawables;
     boolean hints;
-
+    Image selectedImage;
+    int selectedImageId;
 
     static final int GALLERY_REQUEST = 1;
     Bitmap bMap;
+    public static final String CARDS_KEY = "mCards";
+    public static final String EXTRA_CARDS = "mCardsExtra";
+    public static final String COUNT_KEY = "count";
+    public static final String EXTRA_COUNT = "countExtra";
+    public static final String DRAWABLE_KEY = "drawables";
+    public static final String EXTRA_DRAWABLE = "drawablesExtra";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
 
         TimerTextView = findViewById(R.id.time);
         listButtons = new ArrayList<>();
@@ -70,33 +77,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listButtons.add((Button)findViewById(R.id.fourteen));
         listButtons.add((Button)findViewById(R.id.fifteen));
         listButtons.add((Button)findViewById(R.id.sixteen));
-        //uploadImage();
-        //Bitmap bMap = BitmapFactory.decodeResource(getResources(), R.drawable.pp);
-        /*Bitmap bMapScaled = Bitmap.createScaledBitmap(bMap, 240, 240, true);
-        Bitmap[] bitmapsArray = new Bitmap[16];
-        bitmapsArray[0] = Bitmap.createBitmap(bMapScaled, 0, 0, 60, 60);
-        bitmapsArray[1] = Bitmap.createBitmap(bMapScaled, 60, 0, 60, 60);
-        bitmapsArray[2] = Bitmap.createBitmap(bMapScaled, 120, 0, 60, 60);
-        bitmapsArray[3] = Bitmap.createBitmap(bMapScaled, 180, 0, 60, 60);
-        bitmapsArray[4] = Bitmap.createBitmap(bMapScaled, 0, 60, 60, 60);
-        bitmapsArray[5] = Bitmap.createBitmap(bMapScaled, 60, 60, 60, 60);
-        bitmapsArray[6] = Bitmap.createBitmap(bMapScaled, 120, 60, 60, 60);
-        bitmapsArray[7] = Bitmap.createBitmap(bMapScaled, 180, 60, 60, 60);
-        bitmapsArray[8] = Bitmap.createBitmap(bMapScaled, 0, 120, 60, 60);
-        bitmapsArray[9] = Bitmap.createBitmap(bMapScaled, 60, 120, 60, 60);
-        bitmapsArray[10] = Bitmap.createBitmap(bMapScaled, 120, 120, 60, 60);
-        bitmapsArray[11] = Bitmap.createBitmap(bMapScaled, 180, 120, 60, 60);
-        bitmapsArray[12] = Bitmap.createBitmap(bMapScaled, 0, 180, 60, 60);
-        bitmapsArray[13] = Bitmap.createBitmap(bMapScaled, 60, 180, 60, 60);
-        bitmapsArray[14] = Bitmap.createBitmap(bMapScaled, 120, 180, 60, 60);
-        bitmapsArray[15] = Bitmap.createBitmap(bMapScaled, 180, 180, 60, 60);
-        for (int i = 0; i < 16; i++) {
-            listButtons.get(i).setBackground(new BitmapDrawable(getResources(), bitmapsArray[i]));
-        }*/
-        drawables = new ArrayList<>();
+
+        /*drawables = new ArrayList<>();
         for (int i = 0; i < 16; i++) {
             drawables.add(listButtons.get(i).getBackground());
-        }
+        }*/
         for (int i = 0; i < 16; i++)
             listButtons.get(i).setOnClickListener(this);
         startGame(false, savedInstanceState);
@@ -109,56 +94,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-
-
         switch(requestCode) {
             case GALLERY_REQUEST:
                 if(resultCode == RESULT_OK){
-
                     Uri selectedImage = imageReturnedIntent.getData();
-                    //imageView.setImageURI(selectedImage);
                     try {
                         bMap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
                     } catch (IOException e) {
                         e.printStackTrace();
-                    }/*
-                    imageView.setImageBitmap(bitmap);
-                    Bitmap btmp = Bitmap.createBitmap(bitmap, 30, 30, bitmap.getWidth()/8, bitmap.getHeight()/8);
-                    imageView2.setImageBitmap(bitmap);*/
+                    }
                 }
         }
-        Bitmap bMapScaled = Bitmap.createScaledBitmap(bMap, 240, 240, true);
-        Bitmap[] bitmapsArray = new Bitmap[16];
-        bitmapsArray[0] = Bitmap.createBitmap(bMapScaled, 0, 0, 60, 60);
-        bitmapsArray[1] = Bitmap.createBitmap(bMapScaled, 60, 0, 60, 60);
-        bitmapsArray[2] = Bitmap.createBitmap(bMapScaled, 120, 0, 60, 60);
-        bitmapsArray[3] = Bitmap.createBitmap(bMapScaled, 180, 0, 60, 60);
-        bitmapsArray[4] = Bitmap.createBitmap(bMapScaled, 0, 60, 60, 60);
-        bitmapsArray[5] = Bitmap.createBitmap(bMapScaled, 60, 60, 60, 60);
-        bitmapsArray[6] = Bitmap.createBitmap(bMapScaled, 120, 60, 60, 60);
-        bitmapsArray[7] = Bitmap.createBitmap(bMapScaled, 180, 60, 60, 60);
-        bitmapsArray[8] = Bitmap.createBitmap(bMapScaled, 0, 120, 60, 60);
-        bitmapsArray[9] = Bitmap.createBitmap(bMapScaled, 60, 120, 60, 60);
-        bitmapsArray[10] = Bitmap.createBitmap(bMapScaled, 120, 120, 60, 60);
-        bitmapsArray[11] = Bitmap.createBitmap(bMapScaled, 180, 120, 60, 60);
-        bitmapsArray[12] = Bitmap.createBitmap(bMapScaled, 0, 180, 60, 60);
-        bitmapsArray[13] = Bitmap.createBitmap(bMapScaled, 60, 180, 60, 60);
-        bitmapsArray[14] = Bitmap.createBitmap(bMapScaled, 120, 180, 60, 60);
-        bitmapsArray[15] = Bitmap.createBitmap(bMapScaled, 180, 180, 60, 60);
+        selectedImage = new Image(bMap);
+        Bitmap[] bitmapsArray = selectedImage.getPieces();
         for (int i = 0; i < 16; i++) {
             listButtons.get(i).setBackground(new BitmapDrawable(getResources(), bitmapsArray[i]));
         }
-        //drawables = new ArrayList<>();
-        for (int i = 0; i < 16; i++) {
+        /*for (int i = 0; i < 16; i++) {
             drawables.set(i, listButtons.get(i).getBackground());
-        }
-
+        }*/
+        updateButtons();
     }
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putSerializable("TAG", buttons);
-        savedInstanceState.putInt("COUNT", count);
+        savedInstanceState.putSerializable(CARDS_KEY, mCards);
+        //savedInstanceState.putParcelable(DRAWABLE_KEY, selectedImage.getImage());
+        savedInstanceState.putInt(COUNT_KEY, count);
     }
 
     private void startGame(boolean hard, Bundle savedInstanceState) {
@@ -176,17 +138,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (savedInstanceState == null) {
             Intent intent = getIntent();
             if (intent.getExtras() != null && !level) {
-                buttons = (Buttons) intent.getSerializableExtra("BUTTONS");
-                count = intent.getIntExtra("COUNT", 0);
+                mCards = (Cards) intent.getSerializableExtra(EXTRA_CARDS);
+                count = intent.getIntExtra(EXTRA_COUNT, 0);
+                //selectedImage = new Image((Bitmap)intent.getParcelableExtra(EXTRA_DRAWABLE));
                 updateButtons();
             } else {
                 count = 0;
-                buttons = new Buttons();
+                mCards = new Cards();
+                selectedImage = new Image(BitmapFactory.decodeResource(getResources(), R.drawable.pp));
+                selectedImageId = R.drawable.pp;
                 contribution(hard);
             }
         } else {
-            count = savedInstanceState.getInt("COUNT");
-            buttons = (Buttons) savedInstanceState.getSerializable("TAG");
+            count = savedInstanceState.getInt(COUNT_KEY);
+            mCards = (Cards) savedInstanceState.getSerializable(CARDS_KEY);
+            selectedImage = new Image(BitmapFactory.decodeResource(getResources(), R.drawable.pp));
             updateButtons();
         }
 
@@ -205,8 +171,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add("Normal level");
         menu.add("Hard level");
-        menu.add("Show hints");
-        menu.add("Hide hints");
+        //menu.add("Show hints");
+        //menu.add("Hide hints");
         menu.add("Upload image");
         menu.add("Back");
         return super.onCreateOptionsMenu(menu);
@@ -222,16 +188,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startGame(true, null);
         } else if ("Back".equals(item.getTitle())) {
             back();
-        } else if ("Show hints".equals(item.getTitle())) {
+        } /*else if ("Show hints".equals(item.getTitle())) {
             hints = true;
             changeHints(14);
         } else if ("Hide hints".equals(item.getTitle())) {
             hints = false;
             changeHints(0);
-        } else if ("Upload image".equals(item.getTitle())) {
+        }*/ else if ("Upload image".equals(item.getTitle())) {
             uploadImage();
         }
         return super.onOptionsItemSelected(item);
+    }
+    public void onSwitchClicked(View view) {
+        boolean on = ((Switch)view).isChecked();
+        if (on) {
+            hints = true;
+            changeHints(14);
+        } else {
+            hints = false;
+            changeHints(0);
+        }
     }
     public void changeHints(int size) {
         for (int i = 0; i < 16; i++) {
@@ -241,13 +217,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void back() {
         Intent intent = new Intent(this, StartActivity.class);
-        intent.putExtra("BUTTONS", buttons);
-        intent.putExtra("COUNT", count);
+        intent.putExtra(EXTRA_CARDS, mCards);
+        Bitmap selbit = selectedImage.getImage();
+        intent.putExtra(EXTRA_DRAWABLE, selbit);
+
+        intent.putExtra(EXTRA_COUNT, count);
         startActivity(intent);
     }
     private void contribution(boolean hard) {
 
-        buttons.shuffleButtons(hard);
+        mCards.shuffleCards(hard);
         updateButtons();
     }
 
@@ -284,23 +263,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        Buttons.foo(this);
         Button btn = (Button)v;
         int index = listButtons.indexOf(btn);
-        buttons.moveButtons(index);
+        mCards.moveCard(index);
         updateButtons();
         check();
     }
 
     private void updateButtons() {
         for (int i = 0; i < 16; i++) {
-            listButtons.get(i).setText(buttons.get(i).toString());
-            listButtons.get(i).setBackground(drawables.get(buttons.get(i)-1));
+            listButtons.get(i).setText(mCards.get(i).toString());
+            listButtons.get(i).setBackground(new BitmapDrawable(getResources(), selectedImage.getPieces()[mCards.get(i)-1]));/* drawables.get()*/;
 
             listButtons.get(i).setEnabled(true);
             listButtons.get(i).setTextColor(getResources().getColor(R.color.background_light));
             if (!hints) listButtons.get(i).setTextSize(0);
-            if (buttons.get(i) == 16)  {
+            if (mCards.get(i) == 16)  {
                 listButtons.get(i).setTextColor(getResources().getColor(R.color.holo_blue_bright));
                 listButtons.get(i).setEnabled(false);
                 listButtons.get(i).setTextSize(14);
